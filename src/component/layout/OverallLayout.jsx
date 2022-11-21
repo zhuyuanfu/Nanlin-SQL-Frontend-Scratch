@@ -1,6 +1,7 @@
 import React from "react";
 import { Breadcrumb, Button, Layout } from 'antd';
 import { Menu } from "antd";
+import LeftTree from "../left-tree/LeftTree.jsx";
 
 import './OverallLayout.css'
 
@@ -19,7 +20,7 @@ class OverallLayout extends React.Component {
             <div>
                 <Layout> 
                     <Header className="header" >
-                        <div className="logo" >njfu</div>
+                        <Button >place logo here</Button>
 
                         {/* <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']} items={items1} /> */}
                     </Header>
@@ -27,6 +28,7 @@ class OverallLayout extends React.Component {
                         <Sider width={150} className="site-layout-background">
                             <Button >place left tree here</Button>
                         </Sider>
+                        <LeftTree />
                         <Layout style={{padding: '0 24px 24px'}}>
                             <Breadcrumb style={{margin: '16px 0'}}>
                                 <Breadcrumb.Item>Home</Breadcrumb.Item>
