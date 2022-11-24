@@ -32,7 +32,7 @@ module.exports = {
   ],
   devServer: {
     port: 3001,
-    compress: true,
+    compress: false,
     open: true
   }
 };

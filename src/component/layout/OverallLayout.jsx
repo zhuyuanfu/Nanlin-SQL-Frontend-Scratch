@@ -26,9 +26,9 @@ class OverallLayout extends React.Component {
                     </Header>
                     <Layout>
                         <Sider width={150} className="site-layout-background">
-                            <Button >place left tree here</Button>
+                            {/* <Button >place left tree here</Button> */}
+                            <LeftTree />
                         </Sider>
-                        <LeftTree />
                         <Layout style={{padding: '0 24px 24px'}}>
                             <Breadcrumb style={{margin: '16px 0'}}>
                                 <Breadcrumb.Item>Home</Breadcrumb.Item>
