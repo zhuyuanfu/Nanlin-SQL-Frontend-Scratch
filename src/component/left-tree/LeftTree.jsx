@@ -9,9 +9,22 @@ class LeftTree extends React.Component {
         this.state = {
             clickedTimes: 0,
             userSelectedObjectType: "", // 可能的值为：DATASOURCE, DATABASE, TABLE, FIELD
+            treeData: [{
+                title: "MYSQL",
+                key: "/MYSQL",
+                isLeaf: false,
+                objectType: "DATASOURCE",
+                children: [{}, {}]
+            }, {
+                title: "ORACLE",
+                key: "/ORACLE",
+                children: [{}]
+            }]
         }
         this.handleClick = this.handleClick.bind(this);
         this.queryDatasourceTypeIntoTreeData = this.queryDatasourceTypeIntoTreeData.bind(this);
+        this.queryMySQLDatasourcesIntoTreeData = this.queryMySQLDatasourcesIntoTreeData.bind(this);
+        this.onLoadData = this.onLoadData.bind(this);
     }
 
     UNSAFE_componentWillMount() {
@@ -23,7 +36,8 @@ class LeftTree extends React.Component {
             clickedTimes: this.state.clickedTimes + 1,
         })
         console.log("entered handleClick() " + this.state.clickedTimes +" time(s)");
-        this.queryDatasourceTypeIntoTreeData();
+        //this.queryDatasourceTypeIntoTreeData();
+        this.queryMySQLDatasourcesIntoTreeData();
     };
 
     queryDatasourceTypeIntoTreeData() {
@@ -42,13 +56,33 @@ class LeftTree extends React.Component {
             })
         });
     }
+    
+    onLoadData() {
+        for (let i = 0; i < 1; i++) {
+
+        }
+        this.queryMySQLDatasourcesIntoTreeData();
+    }
+
+    queryMySQLDatasourcesIntoTreeData() {
+        const previousTreeData = this.state.treeData;
+        previousTreeData[0].children[0] = {
+            title: "child" + this.state.clickedTimes,
+            key: "child" + this.state.clickedTimes,
+            children: [{}]
+        }
+        this.setState({
+            treeData: previousTreeData,
+        });
+    }
 
     render () {
         return (
             <div>
                 <Button onClick={this.handleClick}>click to query tree roots</Button>
                 <Tree 
-                    treeData={this.state.treeData} 
+                    treeData = {this.state.treeData} 
+                    // loadData = {this.onLoadData}
                 />
             </div>
         )
