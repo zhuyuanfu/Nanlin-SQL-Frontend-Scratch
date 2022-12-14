@@ -48,7 +48,7 @@ class LeftTree extends React.Component {
                 treeData[i] = {
                     title: supportedDatasourceTypes[i],
                     key: "/" + supportedDatasourceTypes[i],
-                    children: [{}, {}]
+                    //children: [{}, {}]
                 }
             }
             this.setState({
@@ -76,13 +76,41 @@ class LeftTree extends React.Component {
         });
     }
 
+    onLoadData(treeNode) {
+        console.log("treenode = " + JSON.stringify(treeNode));
+        return new Promise((resolve) => {
+            if (treeNode.children) {
+                console.log("Current treeNode has children. Stopping faking.")
+                resolve();
+                return;
+            }
+            console.log("Current treeNode has no children. Faking 2.")
+            setTimeout(() => {
+                treeNode.children = [{
+                    title: "hahahaha",
+                    key: treeNode.key + "/" + "hahahaha",
+                    children: [],
+                    isLeaf: false
+                },{
+                    title: "hehe",
+                    key: treeNode.key + "/" + "hehe",
+                    children: [],
+                    isLeaf: false
+                }];
+                console.log("Current treeNode has no children. Faked 2.")
+                resolve();
+            }, 500);
+
+        });
+    }
+
     render () {
         return (
             <div>
                 <Button onClick={this.handleClick}>click to query tree roots</Button>
                 <Tree 
-                    treeData = {this.state.treeData} 
-                    // loadData = {this.onLoadData}
+                    treeData={this.state.treeData} 
+                    loadData={this.onLoadData}
                 />
             </div>
         )
