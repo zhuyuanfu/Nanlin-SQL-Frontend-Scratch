@@ -21,12 +21,9 @@ class OverallLayout extends React.Component {
                 <Layout> 
                     <Header className="header" >
                         <Button >place logo here</Button>
-
-                        {/* <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']} items={items1} /> */}
                     </Header>
                     <Layout>
                         <Sider width={150} className="site-layout-background">
-                            {/* <Button >place left tree here</Button> */}
                             <LeftTree />
                         </Sider>
                         <Layout style={{padding: '0 24px 24px'}}>

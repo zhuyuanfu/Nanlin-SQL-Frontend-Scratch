@@ -9,6 +9,7 @@ class LeftTree extends React.Component {
         this.state = {
             clickedTimes: 0,
             userSelectedObjectType: "", // 可能的值为：DATASOURCE, DATABASE, TABLE, FIELD
+            userSelectedObjectPath: "",
             treeData: [{
                 title: "MYSQL",
                 key: "/MYSQL",
@@ -21,23 +22,13 @@ class LeftTree extends React.Component {
                 children: [{}]
             }]
         }
-        this.handleClick = this.handleClick.bind(this);
         this.queryDatasourceTypeIntoTreeData = this.queryDatasourceTypeIntoTreeData.bind(this);
-        this.queryMySQLDatasourcesIntoTreeData = this.queryMySQLDatasourcesIntoTreeData.bind(this);
         this.onLoadData = this.onLoadData.bind(this);
+        this.creatUpdatedTreeNodes = this.creatUpdatedTreeNodes.bind(this);
     }
 
     UNSAFE_componentWillMount() {
         this.queryDatasourceTypeIntoTreeData();
-    };
-
-    handleClick() {
-        this.setState({
-            clickedTimes: this.state.clickedTimes + 1,
-        })
-        console.log("entered handleClick() " + this.state.clickedTimes +" time(s)");
-        //this.queryDatasourceTypeIntoTreeData();
-        this.queryMySQLDatasourcesIntoTreeData();
     };
 
     queryDatasourceTypeIntoTreeData() {
@@ -56,24 +47,31 @@ class LeftTree extends React.Component {
             })
         });
     }
-    
-    onLoadData() {
-        for (let i = 0; i < 1; i++) {
 
-        }
-        this.queryMySQLDatasourcesIntoTreeData();
-    }
-
-    queryMySQLDatasourcesIntoTreeData() {
-        const previousTreeData = this.state.treeData;
-        previousTreeData[0].children[0] = {
-            title: "child" + this.state.clickedTimes,
-            key: "child" + this.state.clickedTimes,
-            children: [{}]
-        }
-        this.setState({
-            treeData: previousTreeData,
-        });
+    /**
+     * 传入：【许多树】、【被展开的Node的key】和【子节点】
+     * 返回：【许多树】，其中被展开的Node的chidren被替换成了入参里的【子节点】
+     * 
+     * nodeList: TreeNode[]
+     * key: String
+     * children: TreeNode[]
+     */
+    creatUpdatedTreeNodes(nodeList, key, children) {
+        return nodeList.map((node) => {
+            if (node.key === key) {
+              return {
+                ...node,
+                children,
+              };
+            }
+            if (node.children) {
+              return {
+                ...node,
+                children: this.creatUpdatedTreeNodes(node.children, key, children),
+              };
+            }
+            return node;
+          });
     }
 
     onLoadData(treeNode) {
@@ -85,21 +83,28 @@ class LeftTree extends React.Component {
                 return;
             }
             console.log("Current treeNode has no children. Faking 2.")
+
             setTimeout(() => {
-                treeNode.children = [{
-                    title: "hahahaha",
-                    key: treeNode.key + "/" + "hahahaha",
-                    children: [],
+                let newChildren = [{
+                    title: "haha",
+                    key: treeNode.key + "/" + "haha",
+                    //children: [],
                     isLeaf: false
                 },{
                     title: "hehe",
                     key: treeNode.key + "/" + "hehe",
-                    children: [],
+                    //children: [],
                     isLeaf: false
                 }];
+
+                let newTreeData = this.creatUpdatedTreeNodes(this.state.treeData, treeNode.key, newChildren);
+                this.setState({
+                    treeData: newTreeData,
+                })
+
                 console.log("Current treeNode has no children. Faked 2.")
                 resolve();
-            }, 500);
+            }, 100);
 
         });
     }
@@ -107,7 +112,6 @@ class LeftTree extends React.Component {
     render () {
         return (
             <div>
-                <Button onClick={this.handleClick}>click to query tree roots</Button>
                 <Tree 
                     treeData={this.state.treeData} 
                     loadData={this.onLoadData}
